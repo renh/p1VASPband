@@ -103,7 +103,7 @@ fmt_str = "{:15.7E}" + "{:14.6F}" * nspin + '\n'
 
 for ib in range(nb):
     for ik in range(nk):
-        l = "{:15.7E}{:14.6F}{:14.6F}\n".format(
+        l = fmt_str.format(
             kpts[ik,direction],
             *eig[ib,ik]
         )
