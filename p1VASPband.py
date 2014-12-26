@@ -18,8 +18,8 @@ parser.add_argument('-p', '--path',
                     help='Path to working directory', default='.')
 parser.add_argument('-o', '--output',
                     help='Output base filename', default='band')
-parser.add_argument('-f', '--format',
-                    help='Band structure figure format', default='pdf')
+parser.add_argument('-f', '--format', nargs='+',
+                    help='A list of figure formats', default=['pdf'])
 
 parser.add_argument('-d', '--direction',
                     help='High symmetric direction', default='z')
@@ -29,13 +29,15 @@ parser.add_argument('-b', '--below',
 parser.add_argument('-a', '--above',
                    help='Upper energy bound above Fermi level', type=float,
                    default=5.0)
+parser.add_argument('-s', '--show',
+                   help='show interactive band structures',
+                   action='store_true')
 args = parser.parse_args()
 
 path = args.path
 outcar = os.path.join(path, 'OUTCAR')
 eigval = os.path.join(path, 'EIGENVAL')
 of_dat = os.path.join(path, args.output+'.'+'dat')
-of_fig = os.path.join(path, args.output+'.'+args.format)
 directions = {'x':0, 'y':1, 'z':2}
 direction = directions[args.direction]
 lb = args.below
@@ -158,8 +160,11 @@ ax.yaxis.set_minor_locator(mly)
 ax.set_ylabel(r'$\mathsf{E - \mathrm{\mathsf{E_F}} (eV)}$',fontsize=14)
 
 plt.tight_layout()
-plt.savefig(of_fig)
-plt.show()
+for fmt in args.format:
+    of_fig = os.path.join(path, args.output+'.'+fmt)
+    plt.savefig(of_fig)
+if args.show:
+    plt.show()
 
 
 
